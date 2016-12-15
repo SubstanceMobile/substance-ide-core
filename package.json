@@ -1,0 +1,17 @@
+{
+  "name": "substance-ide-core",
+  "main": "./lib/main",
+  "version": "0.0.0",
+  "description": "This package provides most of the Substance IDE's functionality.",
+  "keywords": [
+    "substance",
+    "ide"
+  ],
+  "repository": "https://github.com/atom/projects",
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "dependencies": {
+  }
+}
