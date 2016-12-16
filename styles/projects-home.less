@@ -1,0 +1,41 @@
+// The ui-variables file is provided by base themes provided by Atom.
+//
+// See https://github.com/atom/atom-dark-ui/blob/master/styles/ui-variables.less
+// for a full listing of what's available.
+@import "ui-variables";
+
+.projects {
+  -webkit-user-select: none;
+
+  &-left {
+    background-color: @base-background-color;
+    width:25%;
+    left:0px;
+    height:100%;
+    position:absolute;
+  }
+
+  &-center-vert {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  &-logo {
+    max-width:500px;
+    left:1px;
+    right:1px;
+    margin:auto;
+    position:absolute;
+    // top:50%;
+    // transform:translateY(-50%);
+  }
+
+  &-right {
+    width:75%;
+    padding: 16px;
+    right:0px;
+    height:100%;
+    position:absolute;
+  }
+}

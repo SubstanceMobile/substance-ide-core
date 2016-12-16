@@ -1,0 +1,24 @@
+'.source.kotlin':
+
+
+  'Function':
+    'prefix': 'fun'
+    'body': """
+      fun ${1:name}(${2:Arguments}) {
+        $3
+      }
+    """
+  'Single-line Function':
+    'prefix': 'sfun'
+    'body': 'fun ${1:name}(${2:Arguments}) = $3'
+  'Argument':
+    'prefix': 'arg'
+    'body': '${1:name}: ${2:Type}'
+
+
+  'Variable':
+    'prefix': 'var'
+    'body': 'var ${1:name}: ${2:Type}'
+  'Value':
+    'prefix': 'val'
+    'body': 'val ${1:name}: ${2:Type} = ${3:value}'
