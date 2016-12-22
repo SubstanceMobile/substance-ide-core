@@ -24,7 +24,6 @@ module.exports =
         unpairedEndBrackets++
       else if result.matchText.match startRegex # We have hit a "{", so get rid of one unclosed "}"
         unpairedEndBrackets--
-        console.log "Hit open", unpairedEndBrackets, result
         if (unpairedEndBrackets < 0)
           result.stop()
           return unless ((line.match(/^(\S*class|.*object \:)/g)?[0] ? "") isnt "")
