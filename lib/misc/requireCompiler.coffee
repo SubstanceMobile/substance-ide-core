@@ -4,5 +4,4 @@ module.exports =
     unless compiler
       atom.notifications.addError "#{feature} cannot work without a compatable compiler."
       return false
-    console.log(compiler)
     return true
