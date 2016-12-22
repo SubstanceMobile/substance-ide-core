@@ -1,0 +1,5 @@
+'.platform-darwin':
+  'ctrl-cmd-l': 'prettyprinter:reformat-code'
+
+'.platform-win32, .platform-linux':
+  'ctrl-alt-l': 'prettyprinter:reformat-code'

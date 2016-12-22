@@ -19,6 +19,15 @@
       }
     }
   },
+  "consumedServices": {
+    "build.remote": {
+      "versions": {
+        "^0.0.1": "handleCompiler"
+      }
+    }
+  },
   "dependencies": {
+    "jdjs":"*",
+    "season":"*"
   }
 }

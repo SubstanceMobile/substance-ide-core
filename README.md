@@ -28,7 +28,7 @@ Support for detecting errors in syntax or reference in code.
 
 ## Code scope detection
 
-Support for detecting the scope of code, that is what parts of the rest of the codebase you can access from the class being edited.
+Finds the scope of the code being edited. Scope is defined as the current class being edited, and what that class has access to. This is used to determine what variables to autocomplete, what files to search when refactoring, and  it drives many other code-related features.
 
 ## Code formatting
 

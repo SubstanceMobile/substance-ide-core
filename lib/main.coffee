@@ -7,12 +7,14 @@ module.exports =
   activate: ->
     @session = new CompositeDisposable
 
-    @session.add require('./completion/completer').init(),
-      require('./format/prettyprinter').init(),
-      require('./lint/linter').init(),
-      require('./model/model').init(),
-      require('./refactoring/refactorer').init(),
-      require('./scope/scope').init()
+    @session.add require('./completion/completer').init(@session),
+      require('./format/prettyprinter').init(@session),
+      require('./lint/linter').init(@session),
+      require('./refactoring/refactorer').init(@session),
+      require('./scope/scope').init(@session)
+
+  handleCompiler: (compiler) ->
+    @session.add require('./model/model').init(@session, compiler)
 
   deactivate: ->
     @session.dispose()
