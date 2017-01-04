@@ -105,11 +105,9 @@ module.exports =
               simplifyName fun.return
         for val in scope.fields # Feilds processing
           unless val.private
-            create val.name, val.name,
-            if val.mutable then 'variable' else 'value',
-            simplifyName val.type
+            create val.name, val.name, if val.mutable then 'variable' else 'value', simplifyName val.type
         for cls in scope.classes # Classes processing
-          unless cls.private
+          unless cls.private or (cls.name.endsWith "PACKAGE")
             simple = simplifyName cls.name
             args = []
             argsSnip = []

@@ -9,7 +9,7 @@ module.exports =
 
   findScope: () ->
     editor = atom.workspace.getActiveTextEditor()
-    scope = {type: @prependPackage(editor, "PACKAGE"), name: "PACKAGE", package: importer.getPackage(editor), pos: new Point(0, 0)}
+    scope = {type: @prependPackage(editor, "PACKAGE"), name: "PACKAGE", package: importer.getPackage(editor), pos: new Point(0, 0), uuid: lookup(importer.getPackage(editor))[0]?.id}
 
     unpairedEndBrackets = 0
     startRegex = /{/g
@@ -25,12 +25,14 @@ module.exports =
       else if result.matchText.match startRegex # We have hit a "{", so get rid of one unclosed "}"
         unpairedEndBrackets--
         if (unpairedEndBrackets < 0)
+          unless ((line.match(/^(.*class|.*object \:)/g)?[0] ? "") isnt "")
+            unpairedEndBrackets++
+            return
           result.stop()
-          return unless ((line.match(/^(\S*class|.*object \:)/g)?[0] ? "") isnt "")
           # If we have no unpaired end tags, AND we have an opening bracket, AND we have a valid scope, return.
           cls = "unknown"
           text = line.match(/(\w*\.)*?[A-Z]\w*(?=(?:\(.*\))?\s?(\s?:\s?.*)?[\s?(?:\n{){]}?$)/g)[0]
-          if line.match(/^\S*class/) # This is a local class in this file. Get the full provided name
+          if line.match(/^.*class/) # This is a local class in this file. Get the full provided name
             cls = @prependPackage(editor, text)
             clsName = text
             pkg = importer.getPackage(editor)

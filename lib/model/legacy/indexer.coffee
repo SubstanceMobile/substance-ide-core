@@ -10,6 +10,10 @@ module.exports = KotlinIndexer =
 
   ### Example Data Structure for Reference
     timestamp: # When JAR was last modified
+    packages: [
+      {name: "a.b.c", id: p1}
+      {name: "e.f.g", id: p2}
+    ],
     functions:[
       {
         name: exec
@@ -30,6 +34,7 @@ module.exports = KotlinIndexer =
         super: Foo
         private: false
         final: true
+        in: p1
         args: [
           "java.lang.String",
           "java.lang.Integer"
@@ -40,6 +45,7 @@ module.exports = KotlinIndexer =
         super: Foo
         private: false
         final: true
+        in: 1
         args: [
           "java.lang.String",
           "java.lang.Integer"
@@ -50,6 +56,7 @@ module.exports = KotlinIndexer =
         super: Bar
         private: false
         final: true
+        in: p2
         args: [
           "java.lang.String",
           "java.lang.Integer"
@@ -92,7 +99,7 @@ module.exports = KotlinIndexer =
     new Promise (resolve) =>
       console.log 'Indexing Project'
       @make(@ProjectJar) if @need(@ProjectJar)
-      #@make(@LibsJar, true) if @need(@LibsJar)
+      @make(@LibsJar, true) if @need(@LibsJar)
       @startListening()
       resolve 'Index updated!'
 
@@ -170,6 +177,7 @@ module.exports = KotlinIndexer =
       out.classes = []
       out.fields = []
       out.functions = []
+      out.packages = []
 
       for klass in obj # For all of the classes in the source
         randID = @uuid().generate() # Generate a random identifier for this class, which will be used to look up things later
@@ -197,12 +205,16 @@ module.exports = KotlinIndexer =
           if gen.name is "<init>"
             constructor = gen.arguments
 
+        thisPackage = {name: require('../../misc/importer').package(klass.name), id: @uuid().generate()} # Packages
+        out.packages.push(thisPackage) if (out.packages.filter (pkg) -> return pkg.name is thisPackage.name).length is 0
+
         gen = {} # Create the object for the whole class
         gen.id = randID
-        gen.name = klass.name
+        gen.name = if klass.name.endsWith("Kt") then thisPackage.name + ".PACKAGE" else klass.name
         gen.super = klass.super
         gen.modifiers = klass.modifiers
         gen.args = constructor
+        gen.in = if gen.name.includes("$") then require("../model").lookup(gen.name.split("$").slice(0, -1).join("$"))[0]?.id else thisPackage.id
         out.classes.push gen unless ignorePrivate and klass.modifiers.includes('private')
 
       console.log "Project Indexer for #{source}: Success. Raw Index: ", obj, "Final index: ", out, " Timestamp: ", out.timestamp
@@ -212,7 +224,13 @@ module.exports = KotlinIndexer =
   # Search the index
   ###################
 
-  get: () -> [@sourceIndex]#, @libsIndex]
+  get: () ->
+    [{
+      classes: [].concat @sourceIndex.classes, @libsIndex.classes
+      fields: [].concat @sourceIndex.fields, @libsIndex.fields
+      functions: [].concat @sourceIndex.functions, @libsIndex.functions
+      packages: [].concat @sourceIndex.packages, @libsIndex.packages
+    }]
 
   ##########
   # Utility

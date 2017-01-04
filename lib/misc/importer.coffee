@@ -26,7 +26,7 @@ module.exports = KotlinImporter =
     for imp in @getImports(editor)
       if imp is klass then return true
       if @denamespace(imp) is "*" # Wildcard import
-        if @package imp is @package klass then return true
+        if @package(imp) is @package(klass) then return true
     return false
 
   addImport: (klass) ->
